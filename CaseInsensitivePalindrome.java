@@ -1,4 +1,3 @@
-package JavaLab;
 import java.util.*;
 public class CaseInsensitivePalindrome {
 	    public static void main(String[] args) {
@@ -30,4 +29,5 @@ public class CaseInsensitivePalindrome {
 	        else
 	            return false;
 	    }
+
 }
