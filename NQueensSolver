@@ -1,0 +1,62 @@
+NQueensSolver.java
+import java.util.*;
+public class NQueensSolver {
+    static int[] x;
+    static int solutionCount = 0;
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter the number of Queens: ");
+        int n = sc.nextInt();
+        x = new int[n + 1];
+        System.out.println("\n"+ n + "-Queens Problem\n");
+        nQueens(1, n);
+        if (solutionCount == 0) {
+            System.out.println("No solutions found.");
+        }
+        else {
+            System.out.println("\n"+"Total solutions: " + solutionCount);
+        }
+    }
+    public static void nQueens(int k, int n) {
+        for (int i = 1; i <= n; i++) {
+            if (place(k, i)) {
+                x[k] = i;
+                if (k == n) {
+                    solutionCount++;
+                    printSolution(n);
+                }
+                else {
+                    nQueens(k + 1, n);
+                }
+            }
+        }
+    }
+    public static boolean place(int k, int i) {
+        for (int j = 1; j <= k - 1; j++) {
+            if ((x[j] == i) || (Math.abs(x[j] - i) == Math.abs(j - k))) {
+                return false;
+            }
+        }
+        return true;
+    }
+    private static void printSolution(int n) {
+        System.out.println("\n"+"Solution " + solutionCount + ":");
+        System.out.print("X-Vector: [");
+        for (int i = 1; i <= n; i++) {
+            System.out.print(x[i] + (i == n ? "" : ", "));
+        }
+        System.out.println("]");
+        System.out.println("Chessboard:");
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (x[i] == j) {
+                    System.out.print(" Q "); // Queen placed
+                } else {
+                    System.out.print(" . "); // Empty square
+                }
+            }
+            System.out.println();
+        }
+        System.out.println("---------------------------");
+    }
+}
