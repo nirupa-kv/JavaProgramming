@@ -1,0 +1,113 @@
+Node.java
+public class Node {
+    char symbol;
+    int freq;
+    String code;
+    Node left, right;
+    Node(char symbol, int freq) {
+        this.symbol = symbol;
+        this.freq = freq;
+        this.code = "";
+        this.left = null;
+        this.right = null;
+    }
+}
+MinHeap.java
+public class MinHeap {
+    Node[] heap;
+    int size;
+    MinHeap(int capacity) {
+        heap = new Node[capacity];
+        size = 0;
+    }
+    void insert(Node node) {
+        heap[size] = node;
+        int i = size;
+        size++;
+        while (i > 0 && heap[i].freq < heap[(i - 1) / 2].freq) {
+            Node temp = heap[i];
+            heap[i] = heap[(i - 1) / 2];
+            heap[(i - 1) / 2] = temp;
+            i = (i - 1) / 2;
+        }
+    }
+    Node extractMin() {
+        Node min = heap[0];
+        heap[0] = heap[size - 1];
+        size--;
+        heapify(0);
+        return min;
+    }
+    void heapify(int i) {
+        int smallest = i;
+        int left = 2 * i + 1;
+        int right = 2 * i + 2;
+        if (left < size && heap[left].freq < heap[smallest].freq)
+            smallest = left;
+        if (right < size && heap[right].freq < heap[smallest].freq)
+            smallest = right;
+        if (smallest != i) {
+            Node temp = heap[i];
+            heap[i] = heap[smallest];
+            heap[smallest] = temp;
+            heapify(smallest);
+        }
+    }
+    int getSize() {
+        return size;
+    }
+}
+HuffmanCoding.java
+import java.util.*;
+public class HuffmanCoding{
+    static void assignCodes(Node root, String code) {
+        if (root == null)
+            return;
+        root.code = code;
+        assignCodes(root.left, code + "0");
+        assignCodes(root.right, code + "1");
+    }
+    static void print(Node root) {
+        if (root == null)
+            return;
+        if (root.left == null && root.right == null) {
+            System.out.println(root.code + "\t" + root.symbol + "\t" + root.freq);
+        }
+        print(root.left);
+        print(root.right);
+    }
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        System.out.print("Number of symbols: ");
+        int n=sc.nextInt();
+        char[] symbols=new char[n];
+        int[] freq = new int[n];
+        System.out.println("Enter symbols: ");
+        for(int i=0;i<n;i++) {
+           System.out.print("Symbol "+(i+1)+" : ");
+           symbols[i]=sc.next().charAt(0);
+        }
+        System.out.println("Enter probability ");
+        for(int i=0;i<n;i++) {
+           System.out.print("Probability of "+symbols[i]+": ");
+           freq[i]=sc.nextInt();
+        }
+        MinHeap heap = new MinHeap(100);
+        for (int i = 0; i < symbols.length; i++) {
+            heap.insert(new Node(symbols[i], freq[i]));
+        }
+        while (heap.getSize() > 1) {
+            Node left = heap.extractMin();
+            Node right = heap.extractMin();
+
+            Node newNode = new Node('-', left.freq + right.freq);
+            newNode.left = left;
+            newNode.right = right;
+            heap.insert(newNode);
+        }
+        Node root = heap.extractMin();
+        assignCodes(root, "");
+        System.out.println("Code  Symbol  Frequency");
+        print(root);
+    }
+}
