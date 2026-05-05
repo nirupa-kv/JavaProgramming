@@ -1,0 +1,93 @@
+Node.java
+import java.util.*;
+class Node {
+    int level, value, weight;
+    double bound;
+    List<Item> includedItems;
+    Node(int l, int v, int w) {
+        this.level = l;
+        this.value = v;
+        this.weight = w;
+        this.includedItems = new ArrayList<>();
+    }
+}
+Item.java
+class Item {
+    String name;
+    int value, weight;
+    double ratio;
+    Item(String n, int v, int w) {
+        this.name = n;
+        this.value = v;
+        this.weight = w;
+        this.ratio = (double) v / w;
+    }
+}
+SimpleKnapsack.java
+import java.util.*;
+public class SimpleKnapsack {
+    static double bound(Node u, int n, int W, Item[] items) {
+        if (u.weight >= W) return 0;
+        double profitBound = u.value;
+        int j = u.level + 1;
+        int totWeight = u.weight;
+        while ((j < n) && (totWeight + items[j].weight <= W)) {
+            totWeight += items[j].weight;
+            profitBound += items[j].value;
+            j++;
+        }
+        if (j < n) profitBound += (W - totWeight) * items[j].ratio;
+        return profitBound;
+    }
+    static int knapsack(int W, Item[] items, int n) {
+        Arrays.sort(items, (a, b) -> Double.compare(b.ratio, a.ratio));
+        Queue<Node> Q = new LinkedList<>();
+        Node u = new Node(-1, 0, 0);
+        Node bestNode = u;
+        int maxValue = 0;
+        u.bound = bound(u, n, W, items);
+        Q.add(u);
+        while (!Q.isEmpty()) {
+            u = Q.poll();
+            if (u.level == n - 1) continue;
+            Node vIn = new Node(u.level + 1,u.value + items[u.level + 1].value,u.weight + items[u.level + 1].weight);
+            vIn.includedItems.addAll(u.includedItems);
+            vIn.includedItems.add(items[u.level + 1]);
+            if (vIn.weight <= W && vIn.value > maxValue) {
+                maxValue = vIn.value;
+                bestNode = vIn;
+            }
+            vIn.bound = bound(vIn, n, W, items);
+            if (vIn.bound > maxValue) Q.add(vIn);
+            Node vEx = new Node(u.level + 1, u.value, u.weight);
+            vEx.includedItems.addAll(u.includedItems);
+            vEx.bound = bound(vEx, n, W, items);
+            if (vEx.bound > maxValue) Q.add(vEx);
+        }
+        if (bestNode.includedItems.isEmpty()) {
+            System.out.print("None (Capacity too small)");
+        } else {
+            System.out.print("The optimal subset consists of {");
+            for (Item it : bestNode.includedItems) System.out.print("Item "+it.name + ",");
+        }
+        return maxValue;
+    }
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter number of items: ");
+        int n = sc.nextInt();
+        Item[] items = new Item[n];
+        System.out.println("Symbol  Weight  Value");
+        for (int i = 0; i < n; i++) {
+            String symbol = sc.next();
+            int weight = sc.nextInt();
+            int value = sc.nextInt();
+            items[i] = new Item(symbol, value, weight);
+        }
+        System.out.print("Enter knapsack capacity: ");
+        int W = sc.nextInt();
+        int maxValue = knapsack(W, items, n);
+        System.out.print("} with optimal value = " + maxValue);
+        sc.close();
+    }
+}
