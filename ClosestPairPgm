@@ -1,0 +1,51 @@
+ClosestPair.java
+import java.util.List;
+public class ClosestPair {
+public double closestPoints(List<int[]> coordinates) {
+        int[] p1, p2;
+        int[] point1=new int[2];
+        int[] point2=new int[2];
+        double sqrvalue;
+        double d = Double.MAX_VALUE;
+        int n = coordinates.size();
+        for (int i = 0; i < n - 1; i++) {
+            for (int j = i + 1; j < n; j++) {
+                p1 = coordinates.get(i);
+                p2 = coordinates.get(j);
+                sqrvalue = Math.sqrt(Math.pow((p1[0] - p2[0]),2)+ Math.pow((p1[1] - p2[1]),2));
+                if (sqrvalue < d) {
+                    d = sqrvalue;
+                    point1=p1;
+                    point2=p2;
+                }
+            }
+        }
+        System.out.println("The points are ("+point1[0]+","+point1[1]+")"+" and ("+point2[0]+","+point2[1]+")");
+        return d;
+    }
+}
+ClosestPairPgm.java
+import java.util.*;
+public class ClosestPairPgm {
+   public static void main(String[] args) {
+      Scanner sc = new Scanner(System.in);
+      int n;
+      String input;
+      String[] parts;
+      int x, y;
+      List<int[]> coordinates = new ArrayList<>();
+      System.out.println("Enter the number of points: ");
+      n = sc.nextInt();
+      for (int i = 0; i < n; i++) {
+         System.out.println("Enter the points (Separated by comma): ");
+         input = sc.next();
+         parts = input.replace("(", "").replace(")", "").split(",");
+         x = Integer.parseInt(parts[0]);
+         y = Integer.parseInt(parts[1]);
+         coordinates.add(new int[]{x, y});
+      }
+      ClosestPair cp = new ClosestPair();
+      double dist = cp.closestPoints(coordinates);
+      System.out.printf("Distance between the closest points is: %.4f%n", dist);
+   }
+}
