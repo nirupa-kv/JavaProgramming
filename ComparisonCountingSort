@@ -1,0 +1,57 @@
+ComparisonCountingSort.java
+import java.util.*;
+public class ComparisonCountingSort {
+    public static int[] comparisonCountingSort(int[] A) {
+        int n = A.length;
+        int[] count = new int[n];
+        int[] S = new int[n];
+        for (int i = 0; i < n; i++) {
+            count[i] = 0;
+        }
+        for (int i = 0; i <= n - 2; i++) {
+            for (int j = i + 1; j <= n - 1; j++) {
+                if (A[i] < A[j]) {
+                    count[j] = count[j] + 1;
+                } else {
+                    count[i] = count[i] + 1;
+               }
+            }
+            System.out.print("Pass "+(i+1)+": ");
+            System.out.print("\t".repeat(i));
+            for (int k=i;k<count.length;k++) {
+               System.out.print(count[k] + "\t");
+            }
+            System.out.println();
+        }
+        for (int i = 0; i < n; i++) {
+            S[count[i]] = A[i];
+        }
+        System.out.print("Count:");
+        for (int k = 0; k < n; k++) {
+           System.out.print("\t"+count[k]);
+        }
+        System.out.println();
+        return S;
+    }
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        System.out.print("Enter the number of elements: ");
+        int no=sc.nextInt();
+        int[] A=new int[no];
+        System.out.print("Enter the array elements: ");
+        for(int k=0;k<no;k++) {
+           A[k]=sc.nextInt();
+        }
+        System.out.println("Unsorted Array: ");
+        for(int k=0;k<no;k++) {
+           System.out.print("\t"+(A[k]));
+        }
+        System.out.println();
+        int[] sorted = comparisonCountingSort(A);
+        System.out.println("Sorted Array:");
+        for(int k=0;k<no;k++) {
+           System.out.print("\t"+(sorted[k]));
+        }
+        System.out.println();
+    }
+}
