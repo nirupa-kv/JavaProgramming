@@ -1,0 +1,89 @@
+MergeSort.java
+import java.util.*;
+public class MergeSort{
+public static void main(String[] args) {
+       Scanner sc= new Scanner(System.in);
+       int n;
+       System.out.println("Enter the number of elements of the array:");
+       n=sc.nextInt();
+       int[] A=new int[n];
+       int[] B=new int[n];
+       for(int i=0;i<n;i++) {
+          System.out.print("Element "+(i+1)+": ");
+          A[i]=sc.nextInt();
+       }
+       MergeSortPgm ms=new MergeSortPgm();
+       ms.mergeSort(A);
+       System.out.println();
+       System.out.println("Array after Merge Sort: ");
+       for(int i=0;i<n;i++) {
+           System.out.print(A[i]+"\t");
+       }
+   }
+}
+
+MergeSortPgm.java
+import java.util.*;
+public class MergeSortPgm {
+   public void mergeSort(int[] A) {
+      int n=A.length;
+      int mid=0;
+      if(n>1){
+         mid=n/2;
+         int[] B=new int[mid];
+         for(int i=0;i<mid;i++) {
+            B[i]=A[i];
+         }
+         int[] C=new int[n-mid];
+         for(int i=mid;i<n;i++){
+            C[i-mid]=A[i];
+         }
+         System.out.println("Separated arrays: ");
+         System.out.print("Array 1:"+"\t");
+         for(int i=0;i<B.length;i++) {
+            System.out.print(B[i]+"\t");
+         }
+         System.out.print("\t\t"+"Array 2:"+"\t");
+         for(int j=0;j<C.length;j++) {
+            System.out.print(C[j]+"\t");
+         }
+         System.out.println();
+         mergeSort(B);
+         mergeSort(C);
+         merge(B,C,A);
+      }
+   }
+   public void merge(int[] B,int[] C,int[] A) {
+      int i=0;
+      int j=0;
+      int k=0;
+      int p=B.length;
+      int q=C.length;
+      while(i<p && j<q) {
+         if(B[i]<=C[j]) {
+            A[k]=B[i];
+            i++;
+         }
+         else {
+            A[k]=C[j];
+            j++;
+         }
+         k++;
+      }
+      if(i==p) {
+         while(j<q) {
+            A[k++]=C[j++];
+         }
+      }
+      else {
+         while(i<p) {
+            A[k++]=B[i++];
+         }
+      }
+      System.out.println("Merged Array: "+"\t");
+      for(int m=0;m<k;m++) {
+         System.out.print(A[m]+"\t");
+      }
+      System.out.println();
+   }
+}
