@@ -1,0 +1,44 @@
+Heap.java
+import java.util.*;
+public class Heap{
+    public static void main(String[] args){
+        Scanner sc=new Scanner(System.in);
+        int[] arr;
+        int n;
+        System.out.print("n = ");
+        n=sc.nextInt();
+        arr=new int[n];
+        for(int p=0;p<n;p++) {
+                System.out.print("Array["+(p+1)+"] =");
+                arr[p]=sc.nextInt();
+        }
+        System.out.println("Initial Array: "+Arrays.toString(arr));
+        for (int i=n/2-1;i>=0;i--)
+            percolateDown(arr,n,i);
+        System.out.println("Heap ordered Array: "+Arrays.toString(arr));
+        System.out.println("Removing elements of the heap using deleteMin().");
+        int[] sorted = new int[n];
+        for (int i=0;i<n;i++){
+            sorted[i]=arr[0];
+            arr[0]=arr[n-1-i];
+            System.out.println("deleteMin() => "+sorted[i]);
+            percolateDown(arr,n-1-i,0);
+        }
+        System.out.println("Heap Sorted Array: "+Arrays.toString(sorted));
+    }
+    public static void percolateDown(int[] arr,int size,int i) {
+        int smallest=i;
+        int l=2*i+1;
+        int r =2*i+2;
+        if (l<size && arr[l]<arr[smallest])
+                smallest = l;
+        if (r<size && arr[r]<arr[smallest])
+                smallest = r;
+        if (smallest!=i){
+            int temp = arr[i];
+            arr[i] = arr[smallest];
+            arr[smallest] = temp;
+            percolateDown(arr,size,smallest);
+        }
+    }
+}
