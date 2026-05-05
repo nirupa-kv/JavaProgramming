@@ -1,0 +1,93 @@
+import java.util.*;
+public class BubbleSortPgm {
+   public static void main(String[] args) {
+      Scanner sc=new Scanner(System.in);
+      String[] arr;
+      int n;
+      System.out.println("Enter the number of elements of the array: ");
+      n=sc.nextInt();
+      arr=new String[n];
+      System.out.println("Enter the elements of the array: ");
+      for(int i=0;i<n;i++) {
+         System.out.print("Element "+(i+1)+" : ");
+         arr[i]=sc.next();
+         System.out.println();
+      }
+      System.out.println("Original array: ");
+      for(int k=0;k<n;k++) {
+         System.out.print(arr[k]+"\t");
+      }
+      System.out.println();
+      BubbleSort b=new BubbleSort();
+      b.stringBubbleSort(arr);
+      System.out.println("Bubble Sorting:");
+      for(int k=0;k<n;k++) {
+         System.out.print(arr[k]+"\t");
+      }
+   }
+}
+import java.util.*;
+public class BubbleSort {
+   public static final String RESET = "\u001B[0m";
+   public static final String RED = "\u001B[31m";
+   public static final String GREEN = "\u001B[32m";
+   public static final String BLUE = "\u001B[34m";
+   public static final String YELLOW = "\u001B[33m";
+   public void stringBubbleSort(String[] arr) {
+      int n=arr.length;
+      String b="";
+      for(int i=0;i<=n-2;i++) {
+         System.out.println();
+         System.out.println("Pass "+(i+1)+" : ");
+         for(int j=0;j<=n-2-i;j++) {
+            if(arr[j].compareTo(arr[j+1])>0) {
+               b=arr[j];
+               arr[j]=arr[j+1];
+               arr[j+1]=b;
+            }
+            System.out.println("Iteration "+(j+1)+": ");
+            for(int k=0;k<n;k++) {
+               if(b.equals(arr[j+1])) {
+                  if(k==j+1) {
+                     System.out.print(RED+arr[k]+RESET);
+                     System.out.print("\t");
+                  }
+                  else if(k==j) {
+                     System.out.print(BLUE+arr[k]+RESET);
+                     System.out.print("\t");
+                  }
+                  else if(k>(n-1-i)) {
+                     System.out.print(GREEN+arr[k]+RESET);
+                     System.out.print("\t");
+                  }
+                  else {
+                     System.out.print(arr[k]);
+                     System.out.print("\t");
+                  }
+               }
+               else {
+                  if(k==j) {
+                  System.out.print(RED+arr[k]+RESET);
+                  System.out.print("\t");
+                  }
+                  else if(k==j+1) {
+                     System.out.print(BLUE+arr[k]+RESET);
+                     System.out.print("\t");
+                  }
+                  else if(k>(n-2-i)) {
+                     System.out.print(GREEN+arr[k]+RESET);
+                     System.out.print("\t");
+                  }
+                  else {
+                     System.out.print(arr[k]);
+                     System.out.print("\t");
+                  }
+               }
+               b="";
+            }
+            System.out.println();
+         }
+         System.out.println();
+      }
+   }
+}
